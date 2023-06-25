@@ -10,7 +10,7 @@ struct Config {
 }
 
 #[derive(Parser, Debug)]
-#[command(name="res2br", author="Ben Raz <ben.raz2008@gmail.com>", about="Converts a resolution (like 1080p) to a bitrate (like 3.000) and optionally allows switching betwen MBPS (default) and KBPS", long_about=None)]
+#[command(name="bitfire", author="Ben Raz <ben.raz2008@gmail.com>", about="Converts a resolution (like 1080p) to a bitrate (like 3.000) and optionally allows switching betwen MBPS (default) and KBPS", long_about=None)]
 struct Arguments {
     #[arg(help = "Accepts a resolution in ###p format")]
     resolution: Option<String>,
@@ -19,7 +19,7 @@ struct Arguments {
     #[arg(help = "Switches to and from displaying bitrate in KBPS format")]
     toggle_kbps: Option<bool>,
     #[arg(short, long="config-path")]
-    #[arg(help = "A path to find the config file at. If left empty, $RES2BR_CONFIG will be used. It is $HOME/.config/res2br/config.json by default. If that file is not present, the default configuration is used.")]
+    #[arg(help = "A path to find the config file at. If left empty, $BITFIRE_CONFIG will be used. It is $HOME/.config/bitfire/config.json by default. If that file is not present, the default configuration is used.")]
     config_path: Option<String>
 }
 
@@ -27,12 +27,12 @@ fn get_config_path(argument: &Option<String>) -> String {
     if argument.is_some() {
         return argument.clone().unwrap();
     }
-    if std::env::var("RES2BR_CONFIG").is_ok() {
-        if std::env::var("RES2BR_CONFIG").unwrap().len() > 2 {
-            return std::env::var("RES2BR_CONFIG").unwrap()
+    if std::env::var("BITFIRE_CONFIG").is_ok() {
+        if std::env::var("BITFIRE_CONFIG").unwrap().len() > 2 {
+            return std::env::var("BITFIRE_CONFIG").unwrap()
         };
     }
-    format!("{}/.config/res2br/config.json", std::env::var("HOME").expect("Could not get value of $HOME variable!"))
+    format!("{}/.config/bitfire/config.json", std::env::var("HOME").expect("Could not get value of $HOME variable!"))
 }
 
 fn get_config_from_path(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
